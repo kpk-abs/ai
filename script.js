@@ -2,8 +2,9 @@ import { prompts } from './config.js';
 import fetch from 'node-fetch';
 
 const apiKey = 'YOUR_API_KEY';
+const action = process.argv[2];
 
-const getGPT4Response = async (action, input) => {
+const getGPT4Response = async (input) => {
   const url = 'https://api.openai.com/v1/chat/completions';
   
   const headers = {
