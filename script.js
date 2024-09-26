@@ -1,37 +1,31 @@
-import { prompts } from './config.js';
-import fetch from 'node-fetch';
+import config from './config.js';
+import dotenv from 'dotenv';
+import OpenAI from "openai";
 
-const apiKey = 'YOUR_API_KEY';
+dotenv.config();
+
+const openai = new OpenAI({
+  apiKey: process.env.API_KEY,
+});
+
+const { model, prompts, inputs } = config;
 const action = process.argv[2];
 
-const getGPT4Response = async (input) => {
-  const url = 'https://api.openai.com/v1/chat/completions';
-  
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${apiKey}`
-  };
-
+const getResponse = async () => {
   const prompt = prompts[action];
-
-  const data = {
-    model: 'gpt-4',
-    messages: [{ role: 'user', content: `${prompt} ${input}` }],
-    max_tokens: 100
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(data)
-    });
-
-    const result = await response.json();
-    console.log(result.choices[0].message.content);
-  } catch (error) {
-    console.error('Error:', error);
-  }
+  const input = inputs[action];
+  const response = await openai.chat.completions.create({
+    model: model,
+    messages: [
+        {
+            role: "user",
+            content: `${prompt} ${input}`,
+        },
+    ]
+});
+  const { content } = response.choices[0].message;
+  const answer = JSON.parse(content);
+  console.log(answer);
 };
 
-export default getGPT4Response;
+getResponse();
