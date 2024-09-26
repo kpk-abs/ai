@@ -8,12 +8,11 @@ const openai = new OpenAI({
   apiKey: process.env.API_KEY,
 });
 
-const { model, prompts, inputs } = config;
+const { model, prompts } = config;
 const action = process.argv[2];
 
-const getResponse = async () => {
+const getResponse = async (input) => {
   const prompt = prompts[action];
-  const input = inputs[action];
   const response = await openai.chat.completions.create({
     model: model,
     messages: [
@@ -25,7 +24,7 @@ const getResponse = async () => {
 });
   const { content } = response.choices[0].message;
   const answer = JSON.parse(content);
-  console.log(answer);
+  return answer;
 };
 
-getResponse();
+export default getResponse;
