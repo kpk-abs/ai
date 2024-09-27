@@ -4,7 +4,7 @@
     "openai": "^4.64.0"
   },
   "scripts": {
-    "start": "node script.js"
+    "start": "node index.js"
   },
   "type": "module"
 }
