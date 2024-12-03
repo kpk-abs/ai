@@ -1,8 +1,10 @@
-import { model, prompts, inputs } from './config.js';
+import config from './config.js';
 import dotenv from 'dotenv';
 import OpenAI from "openai";
 
 dotenv.config();
+
+const { model, prompts } = config;
 
 const {API_KEY: apiKey, ORGANIZATION: organization, PROJECT: project} = process.env
 
@@ -11,6 +13,7 @@ const openai = new OpenAI({
 });
 
 const getResponse = async (input, action) => {
+  console.log(input);
   const prompt = prompts[action];
   const response = await openai.chat.completions.create({
     model: model,
@@ -23,13 +26,9 @@ const getResponse = async (input, action) => {
 });
   const { content } = response.choices[0].message;
   const answer = JSON.parse(content);
-  console.log(answer);
-  
   return answer;
 };
 
-const action = process.argv[2];
 
-getResponse(inputs[action], action)
 
 export default getResponse;
