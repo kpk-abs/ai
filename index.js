@@ -13,7 +13,6 @@ const openai = new OpenAI({
 });
 
 const getResponse = async (input, action) => {
-  console.log(input);
   const prompt = prompts[action];
   const response = await openai.chat.completions.create({
     model: model,
@@ -28,7 +27,5 @@ const getResponse = async (input, action) => {
   const answer = JSON.parse(content);
   return answer;
 };
-
-
 
 export default getResponse;
